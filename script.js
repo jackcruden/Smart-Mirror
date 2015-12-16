@@ -65,7 +65,7 @@ function weather() {
         //console.log(data);
 
         // Assign data to variables
-        var weatherIcon = '/images/' + codes[data.list[0].weather[0].icon] + '.png';
+        var weatherIcon = 'images/' + codes[data.list[0].weather[0].icon] + '.png';
         var tempHigh = Math.round(data.list[0].main.temp_max);
         var tempLow = Math.round(data.list[0].main.temp_min);
         var weatherDescription = data.list[0].weather[0].description;
