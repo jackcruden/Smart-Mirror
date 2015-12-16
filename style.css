@@ -23,6 +23,12 @@ h1 {
     font-weight: 300;
 }
 
+#speech {
+    width: 100%;
+    text-align: center;
+    bottom: 30px;
+}
+
 #time {
     top: 10px;
     left: 30px;
@@ -46,8 +52,7 @@ h1 {
 }
 
 #weather_now {
-    padding-bottom: 20px;
-    border-bottom: 1px solid white;
+
 }
 
 #weather_now #weather_now_icon {
@@ -64,4 +69,24 @@ h1 {
 #weather_now_description {
     font-size: 30px;
     text-transform: capitalize;
+}
+
+#weather_forecast {
+    margin-top: 40px;
+}
+
+.weather_forecast_day {
+    position: relative;
+    float: left;
+    width: 100px;
+    text-align: center;
+}
+
+.weather_forecast_day img {
+    width: 90px;
+    height: 90px;
+}
+
+.weather_forecast_day_temp {
+    font-size: 35px;
 }

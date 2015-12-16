@@ -18,34 +18,20 @@
         <!-- JQuery -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
 
+        <!-- Annyang Voice Control -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.0.0/annyang.min.js"></script>
+
         <!-- Page Style -->
         <link href="style.css" rel="stylesheet" type="text/css">
 
         <!-- Page Script -->
         <script src="script.js" type="text/javascript"></script>
 
-        <!-- Annyang Voice Control -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.0.0/annyang.min.js"></script>
-        <script>
-            if (annyang) {
-                // Let's define our first command. First the text we expect, and then the function it should call
-                var commands = {
-                    'help': function() {
-                        $('#time_date').html('How can I help?');
-                    }
-                };
-
-                // Add our commands to annyang
-                annyang.addCommands(commands);
-
-                // Start listening. You can call this here, or attach this call to an event, button, etc.
-                annyang.start();
-            }
-        </script>
-
     </head>
 
     <body>
+
+        <div id="speech">For a list of commands just say "help".</div>
 
         <div id="time">
 
@@ -66,6 +52,27 @@
                 <span id="weather_now_description">
                     DESCRIPTION
                 </span>
+
+                <div id="weather_forecast">
+                    <div class="weather_forecast_day">
+                        <span class="weather_forecast_week_day">DAY</span>
+                        <img src="images/sun.png">
+                        <span class="weather_forecast_day_temp">H</span>
+                        <span class="weather_forecast_day_temp">L</span>
+                    </div>
+                    <div class="weather_forecast_day">
+                        <span class="weather_forecast_week_day">DAY</span>
+                        <img src="images/sun.png">
+                        <span class="weather_forecast_day_temp">H</span>
+                        <span class="weather_forecast_day_temp">L</span>
+                    </div>
+                    <div class="weather_forecast_day">
+                        <span class="weather_forecast_week_day">DAY</span>
+                        <img src="images/sun.png">
+                        <span class="weather_forecast_day_temp">H</span>
+                        <span class="weather_forecast_day_temp">L</span>
+                    </div>
+                </div>
 
             </div>
 

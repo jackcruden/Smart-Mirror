@@ -69,30 +69,79 @@ function weather() {
     };
 
     // Get the new weather info
-    $.getJSON("http://api.openweathermap.org/data/2.5/forecast?q=Okato,NZ&units=metric&appid=0f171838ffe7d226be21b8e88ebc6956", function(data) {
+    $.getJSON("http://api.openweathermap.org/data/2.5/forecast/daily?q=Okato,NZ&units=metric&cnt=5&appid=0f171838ffe7d226be21b8e88ebc6956", function(data) {
         //console.log(data);
 
         // Assign data to variables
         var weatherIcon = 'images/' + codes[data.list[0].weather[0].icon] + '.png';
-        var tempHigh = Math.round(data.list[0].main.temp_max);
-        var tempLow = Math.round(data.list[0].main.temp_min);
+        var tempHigh = Math.round(data.list[0].temp.max);
+        var tempLow = Math.round(data.list[0].temp.min);
         var weatherDescription = data.list[0].weather[0].description;
 
+        // Update the display
         $('#weather_now_icon').attr('src', weatherIcon);
         $('#weather_now_temp_high').html(tempHigh);
         $('#weather_now_temp_low').html(tempLow);
         $('#weather_now_description').html(weatherDescription);
-    });
 
-    // Update the display
+        // Get and set day 1-3 data
+        for (var i = 1; i < 4; i++) {
+            // Get the day's data
+            var dayData = data.list[i];
+
+            // Get the placeholder
+            var placeholder = $($('#weather_forecast').children()[i-1]);
+
+            // Set the day of the week
+            var timestamp = dayData.dt; // UNIX timestamp in seconds
+            var date = new Date();
+            date.setTime(timestamp*1000);
+            $(placeholder.children()[0]).html(days[date.getDay()].substring(0, 3));
+
+            // Set the icon
+            var dayIcon = 'images/' + codes[dayData.weather[0].icon.substring(0,2)+'d'] + '.png';
+            $(placeholder.children()[1]).attr('src', dayIcon);
+
+            // Set the high
+            var dayHigh = dayData.temp.max;
+            $(placeholder.children()[2]).html(Math.round(dayHigh));
+
+            // Set the low
+            var dayLow = dayData.temp.min;
+            $(placeholder.children()[3]).html(Math.round(dayLow));
+        }
+    });
 
 
     console.log('Finished updating weather.');
     setTimeout(weather, 1800000); // Every half hour
 }
 
+function startListening() {
+    if (annyang) {
+        // Let's define our first command. First the text we expect, and then the function it should call
+        var commands = {
+            'help': function() {
+                $('#speech').html('Try some of these...');
+            },
+            'dismiss': function() {
+                $('#speech').html('For a list of commands just say "help".');
+            }
+        };
+
+        // Add our commands to annyang
+        annyang.addCommands(commands);
+
+        // Start listening. You can call this here, or attach this call to an event, button, etc.
+        annyang.start();
+
+        console.log('Listening...');
+    }
+}
+
 $(document).ready(function() {
     time();
     date();
     weather();
+    startListening();
 });
