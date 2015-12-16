@@ -1,3 +1,7 @@
+// For Google Maps
+var map;
+var geocoder;
+
 var days = [
     'Sunday',
     'Monday',
@@ -122,10 +126,25 @@ function startListening() {
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
             'help': function() {
-                $('#speech').html('Try some of these...');
+                $('#speech').html('Try some of these...<br>' +
+                    '"Show me a <b>map</b> of New Plymouth"<br>' +
+                    '"<b>Dismiss</b>" to return to this screen<br>' +
+                    '');
             },
             'dismiss': function() {
                 $('#speech').html('For a list of commands just say "help".');
+                $('#fullscreen').css('display', 'none');
+            },
+            '(show me a) map (of) *location': showMap,
+            'zoom *direction': function(direction) {
+                console.log('Zooming...');
+                if (direction == 'in') {
+                    console.log('Zooming in...');
+                    map.setZoom(map.zoom + 1);
+                } else if (direction == 'out') {
+                    console.log('Zooming out...');
+                    map.setZoom(map.zoom - 1);
+                }
             }
         };
 
@@ -137,6 +156,41 @@ function startListening() {
 
         console.log('Listening...');
     }
+}
+
+function resetSpeech() {
+    $('#speech').html('For a list of commands just say "help".');
+}
+
+function showMap(location) {
+    console.log('Showing map of ' + location);
+
+    map = '';
+    geocoder = '';
+
+    map = new google.maps.Map(document.getElementById('fullscreen'), {
+        center: {
+            lat: -34.397,
+            lng: 150.644
+        },
+        zoom: 12
+    });
+
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode( { 'address': location}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            console.log("Geocode was not successful for the following reason: " + status);
+        }
+    });
+
+    // Display the map
+    $('#fullscreen').css('display', 'block');
 }
 
 $(document).ready(function() {

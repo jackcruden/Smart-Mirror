@@ -90,3 +90,12 @@ h1 {
 .weather_forecast_day_temp {
     font-size: 35px;
 }
+
+#fullscreen {
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+}
