@@ -1,4 +1,31 @@
+var days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+];
+
+var months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
+
 function time() {
+    console.log('Updating time...');
+
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -9,34 +36,12 @@ function time() {
 
     document.getElementById('time_time').innerHTML = h + ":" + m;
 
-    //setInterval(time, 1000); // Every second
+    console.log('Finished updating time.');
+    setTimeout(time, 10000); // Every second
 }
 
 function date() {
-    var days = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-    ];
-
-    var months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
+    console.log('Updating date...');
 
     var today = new Date();
     var day = today.getDay();
@@ -45,10 +50,13 @@ function date() {
 
     $('#time_date').html(days[day] + ", " + date + " " + months[month]);
 
-    //setInterval(date, 1000); // Every second
+    console.log('Finished updating date.');
+    setTimeout(date, 60000); // Every minute
 }
 
 function weather() {
+    console.log('Updating weather...');
+
     var codes = {
         '01d': 'sun',           '01n': 'moon',
         '02d': 'sun_cloud',     '02n': 'cloud',
@@ -70,8 +78,6 @@ function weather() {
         var tempLow = Math.round(data.list[0].main.temp_min);
         var weatherDescription = data.list[0].weather[0].description;
 
-        console.log(weatherIcon);
-
         $('#weather_now_icon').attr('src', weatherIcon);
         $('#weather_now_temp_high').html(tempHigh);
         $('#weather_now_temp_low').html(tempLow);
@@ -81,7 +87,8 @@ function weather() {
     // Update the display
 
 
-    //setInterval(weather, 1800000); // Every half hour
+    console.log('Finished updating weather.');
+    setTimeout(weather, 1800000); // Every half hour
 }
 
 $(document).ready(function() {
