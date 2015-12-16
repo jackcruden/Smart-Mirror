@@ -1,0 +1,67 @@
+html {
+    margin: 0;
+    width: 100%;
+    font: 25px "Lucida Grande", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: black;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    color: white;
+}
+
+div {
+    position: absolute;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+}
+
+#time {
+    top: 10px;
+    left: 30px;
+    width: 400px;
+}
+
+#time_time {
+    display: block;
+    font-size: 90px;
+}
+
+#time_date {
+    display: block;
+    font-size: 30px;
+}
+
+#weather {
+    top: 30px;
+    right: 30px;
+    width: 300px;
+}
+
+#weather_now {
+    padding-bottom: 20px;
+    border-bottom: 1px solid white;
+}
+
+#weather_now #weather_now_icon {
+    width: 200px;
+    height: 200px;
+}
+
+#weather_now_temp_high, #weather_now_temp_low {
+    float: right;
+    clear: both;
+    font-size: 75px;
+}
+
+#weather_now_description {
+    font-size: 30px;
+    text-transform: capitalize;
+}
