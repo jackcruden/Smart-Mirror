@@ -125,16 +125,20 @@ function startListening() {
     if (annyang) {
         // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
-            'help': function() {
+            'hello': function() {
                 $('#fullscreen').css('display', 'none');
-                $('#speech').html('Try some of these...<br>' +
+                $('#speech_heading').html('Try some of these...');
+                $('#speech_content').html(
                     '"<b>Show me a map of</b> New Plymouth"<br>' +
                     '"Zoom in" / "Zoom out"<br>' +
-                    '"<b>Dismiss</b>" to return to this screen<br>' +
-                    '');
+                    '"<b>Dismiss</b>" to return to this screen<br>'
+                );
+
+                console.log('Listening for command...');
+                startSpeech();
             },
             'dismiss': function() {
-                $('#speech').html('For a list of commands just say "<b>help</b>".');
+                $('#speech_content').html('For a list of commands just say "<b>hello</b>".');
                 $('#fullscreen').css('display', 'none');
             },
             'show me a map of *location': showMap,
@@ -154,7 +158,44 @@ function startListening() {
         // Start listening. You can call this here, or attach this call to an event, button, etc.
         annyang.start();
 
-        console.log('Listening...');
+        console.log('Listening for "hello"...');
+    }
+}
+
+function startSpeech() {
+    if (!('webkitSpeechRecognition' in window)) {
+        upgrade();
+    } else {
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        // Started
+        recognition.onstart = function () {
+            console.log('onstart');
+            $('#speech_content').html('<i class="fa fa-microphone"></i>');
+        };
+        // Finished with result
+        recognition.onresult = function (e) {
+            console.log('onresult');
+
+            // Cancel onend handler
+            recognition.onend = null;
+            console.log('transcript: ' + e.results[0][0].transcript);
+            console.log('confidence: ' + e.results[0][0].confidence);
+        };
+        // Error
+        recognition.onerror = function (e) {
+            console.log('onerror %o', e);
+        };
+        // Finished with no result
+        recognition.onend = function () {
+            console.log('onend');
+            $('#speech_content').html('For a list of commands just say "<b>hello</b>".');
+        };
+
+        // Start listening
+        recognition.start();
     }
 }
 

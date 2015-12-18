@@ -29,6 +29,16 @@ h1 {
     bottom: 30px;
 }
 
+#speech_heading {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 60px;
+}
+
+#speech_content {
+
+}
+
 #time {
     top: 10px;
     left: 30px;
