@@ -55,6 +55,10 @@ h1 {
     font-size: 30px;
 }
 
+#timer {
+    display: none;
+}
+
 #weather {
     top: 30px;
     right: 30px;

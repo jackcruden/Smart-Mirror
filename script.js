@@ -1,7 +1,3 @@
-// For Google Maps
-var map;
-var geocoder;
-
 var days = [
     'Sunday',
     'Monday',
@@ -123,7 +119,6 @@ function weather() {
 
 function startListening() {
     if (annyang) {
-        // Let's define our first command. First the text we expect, and then the function it should call
         var commands = {
             'hello': function() {
                 $('#fullscreen').css('display', 'none');
@@ -131,25 +126,35 @@ function startListening() {
                 $('#speech_content').html(
                     '"<b>Show me a map of</b> New Plymouth"<br>' +
                     '"Zoom in" / "Zoom out"<br>' +
-                    '"<b>Dismiss</b>" to return to this screen<br>'
+                    '"<b>Dismiss</b>" to return to this screen<br>' +
+                    '"<b>Set a timer for</b> 5 <b>minutes</b>"<br>' +
+                    '"<b>Stop the timer</b>"'
                 );
-
-                console.log('Listening for command...');
-                startSpeech();
+                sfx.success();
+                //console.log('Listening for command...');
+                //startSpeech();
             },
             'dismiss': function() {
+                $('#speech_heading').html('');
                 $('#speech_content').html('For a list of commands just say "<b>hello</b>".');
-                $('#fullscreen').css('display', 'none');
+
+                $('#fullscreen').remove();
+                $('body').append('<div id="fullscreen"></div>');
+                sfx.success();
             },
             'show me a map of *location': showMap,
             'zoom in': function() {
                 console.log('Zooming in...');
                 map.setZoom(map.zoom + 2);
+                sfx.success();
             },
             'zoom out': function() {
                 console.log('Zooming out...');
                 map.setZoom(map.zoom - 2);
-            }
+                sfx.success();
+            },
+            'set a timer for *minutes minute(s)': startTimer,
+            'stop the timer': stopTimer
         };
 
         // Add our commands to annyang
@@ -191,7 +196,6 @@ function startSpeech() {
         // Finished with no result
         recognition.onend = function () {
             console.log('onend');
-            $('#speech_content').html('For a list of commands just say "<b>hello</b>".');
         };
 
         // Start listening
@@ -199,8 +203,14 @@ function startSpeech() {
     }
 }
 
+var map;
+var geocoder;
+
 function showMap(location) {
     console.log('Showing map of ' + location);
+
+    // Display the map
+    $('#fullscreen').css('display', 'block');
 
     map = '';
     geocoder = '';
@@ -226,13 +236,71 @@ function showMap(location) {
         }
     });
 
-    // Display the map
-    $('#fullscreen').css('display', 'block');
+    sfx.success();
 }
+
+var timerRunning = false;
+var timerMinutes = 0;
+var timerSeconds = 0;
+var timerTick;
+
+function startTimer(minutes) {
+    stopTimer();
+    console.log('Starting timer for ' + minutes + ' minutes...');
+    timerRunning = true;
+    timerMinutes = minutes-1;
+    if (timerRunning) tickTimer();
+    sfx.success();
+}
+
+function tickTimer() {
+    // Decrement seconds
+    timerSeconds--;
+
+    // Check if decrement minutes
+    if (timerSeconds == 0 && timerMinutes > 0) {
+        timerMinutes--;
+    }
+    // Loop seconds
+    if (timerSeconds == -1) timerSeconds = 59;
+
+    // Check if finished
+    if (timerMinutes == 0 && timerSeconds == 0) {
+        stopTimer();
+
+        sfx.alarm();
+
+        return;
+    }
+
+    // Run again
+    timerTick = setTimeout(tickTimer, 1000); // Every second
+
+    // Write to DOM
+    $('#timer').html('Timer: ' + timerMinutes + ':' + timerSeconds + '....');
+    $('#timer').css('display', 'block');
+}
+
+function stopTimer() {
+    console.log('Stopping timer...');
+    timerRunning = false;
+    timerMinutes = 0;
+    timerSeconds = 0;
+    clearTimeout(timerTick);
+    $('#timer').css('display', 'none');
+    sfx.success();
+}
+
+var sfx;
 
 $(document).ready(function() {
     time();
     date();
     weather();
     startListening();
+
+    // Sound effects
+    var library = {"success":{"Frequency":{"Start":1059.0593974478543,"ChangeSpeed":0.16908740682993084,"ChangeAmount":5.080829871818423,"Min":30,"Max":1641},"Volume":{"Sustain":0.04,"Decay":0.411,"Punch":0,"Master":1,"Attack":0.021},"Generator":{"Func":"sine","ASlide":0.02,"BSlide":0.02,"A":0,"B":0}},"fail":{"Frequency":{"Start":554,"ChangeSpeed":0.16908740682993084,"ChangeAmount":5.080829871818423,"Min":30,"Max":121},"Volume":{"Sustain":0.04,"Decay":0.411,"Punch":0,"Master":1,"Attack":0.021},"Generator":{"Func":"sine","ASlide":0.02,"BSlide":0.02,"A":0,"B":0}},"alarm":{"Frequency":{"Start":420,"ChangeSpeed":0.16908740682993084,"ChangeAmount":5.080829871818423,"Min":30,"Max":650},"Volume":{"Sustain":0.15,"Decay":1.991,"Punch":0,"Master":1,"Attack":0.021},"Generator":{"Func":"sine","ASlide":0.02,"BSlide":0.02,"A":0,"B":0}}};
+
+    sfx = jsfx.Sounds(library);
 });
