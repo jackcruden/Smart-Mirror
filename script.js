@@ -128,7 +128,8 @@ function startListening() {
                     '"Zoom in" / "Zoom out"<br>' +
                     '"<b>Dismiss</b>" to return to this screen<br>' +
                     '"<b>Set a timer for</b> 5 <b>minutes</b>"<br>' +
-                    '"<b>Stop the timer</b>"'
+                    '"<b>Stop the timer</b>"<br>' +
+                    '"<b>Convert</b> 3 cups <b>to</b> millilitres"'
                 );
                 sfx.success();
                 //console.log('Listening for command...');
@@ -294,9 +295,22 @@ function stopTimer() {
 
 function convert(from, to) {
     console.log('Converting ' + from + ' to ' + to);
-    from = math.unit(from);
+
+    var result;
+    try {
+        from = math.unit(from);
+        result = from.to(to);
+        result = parseFloat(result).toFixed(2);
+    } catch(e) {
+        sfx.fail();
+        return;
+    }
+
+    $('#speech_content').html('For a list of commands just say "<b>hello</b>".');
     $('#speech_heading').css('display', 'block');
-    $('#speech_heading').html(from + ' in ' + to + ' is ' + from.to(to));
+    $('#speech_heading').html(from + ' is ' + result + ' ' + to);
+
+    sfx.success();
 }
 
 var sfx;
