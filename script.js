@@ -154,7 +154,8 @@ function startListening() {
                 sfx.success();
             },
             'set a timer for *minutes minute(s)': startTimer,
-            'stop the timer': stopTimer
+            'stop the timer': stopTimer,
+            'convert *from to *to': convert
         };
 
         // Add our commands to annyang
@@ -289,6 +290,13 @@ function stopTimer() {
     clearTimeout(timerTick);
     $('#timer').css('display', 'none');
     sfx.success();
+}
+
+function convert(from, to) {
+    console.log('Converting ' + from + ' to ' + to);
+    from = math.unit(from);
+    $('#speech_heading').css('display', 'block');
+    $('#speech_heading').html(from + ' in ' + to + ' is ' + from.to(to));
 }
 
 var sfx;
